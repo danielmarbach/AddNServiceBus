@@ -17,6 +17,7 @@
         public static IServiceCollection AddNServiceBus(this IServiceCollection services, EndpointConfiguration configuration)
         {
             // find out how to deal with shutdown timeout of 5 seconds
+            // Use .UseShutdownTimeout(timespan) to change the default shutdown timeout.
             var management = new SessionAndConfigurationHolder(configuration);
             services.AddSingleton<IMessageSession>(provider => management.Session);
             services.AddSingleton(management);
