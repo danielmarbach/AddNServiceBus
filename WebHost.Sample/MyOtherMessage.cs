@@ -2,7 +2,7 @@
 {
     using NServiceBus;
 
-    internal class MyMessage : ICommand
+    internal class MyOtherMessage : ICommand
     {
     }
 }

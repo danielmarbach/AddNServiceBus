@@ -1,22 +1,20 @@
-﻿namespace GenericHost.Sample
+﻿namespace Sample
 {
     using System.Threading.Tasks;
-    using Microsoft.Extensions.Hosting;
-    using Microsoft.Extensions.DependencyInjection;
     using AddNServiceBus;
+    using Microsoft.Extensions.DependencyInjection;
+    using Microsoft.Extensions.Hosting;
     using NServiceBus;
 
-    class Program
+    internal class Program
     {
-        static async Task Main(string[] args)
+        private static async Task Main(string[] args)
         {
             var host = new HostBuilder()
                 .ConfigureServices(services =>
                 {
-                    services.AddNServiceBus("MyEndpoint", endpointConfiguration =>
-                    {
-                        endpointConfiguration.UseTransport<LearningTransport>();
-                    });
+                    services.AddNServiceBus("MyEndpoint",
+                        endpointConfiguration => { endpointConfiguration.UseTransport<LearningTransport>(); });
 
                     services.AddHostedService<MyBackgroundService>();
                 })
