@@ -33,13 +33,14 @@
                 if (!SpinWait.SpinUntil(() => management.MessageSession != null || management.StartupException != null,
                     timeout))
                 {
-                    throw new TimeoutException($"Unable to resolve the message session within '{timeout.ToString()}'.");
+                    throw new TimeoutException($"Unable to resolve the message session within '{timeout.ToString()}'. If you are trying to resolve the session within hosted services it is encouraged to use `Lazy<IMessageSession>` instead of `IMessageSession` directly");
                 }
 
                 management.StartupException?.Throw();
 
                 return management.MessageSession;
             });
+            services.AddSingleton(provider => new Lazy<IMessageSession>(provider.GetService<IMessageSession>));
             return services;
         }
     }
