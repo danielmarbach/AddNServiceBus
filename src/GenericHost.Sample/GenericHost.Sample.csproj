@@ -10,7 +10,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\src\AddNServiceBus.csproj" />
+    <ProjectReference Include="..\AddNServiceBus\AddNServiceBus.csproj" />
   </ItemGroup>
 
 </Project>
