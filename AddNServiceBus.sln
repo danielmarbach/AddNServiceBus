@@ -7,7 +7,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AddNServiceBus", "src\AddNS
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GenericHost.Sample", "src\GenericHost.Sample\GenericHost.Sample.csproj", "{3B99DE12-5967-4BAF-8EF1-7F4B15155A16}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebHost.Sample", "WebHost.Sample\WebHost.Sample.csproj", "{7A75317C-48BE-47EC-9465-9694E5C55BB0}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebHost.Sample", "src\WebHost.Sample\WebHost.Sample.csproj", "{7A75317C-48BE-47EC-9465-9694E5C55BB0}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
