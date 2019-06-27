@@ -1,17 +1,19 @@
 namespace AddNServiceBus
 {
     using NServiceBus;
+    using System.Runtime.ExceptionServices;
 
-    class SessionAndConfigurationHolder 
+    class SessionAndConfigurationHolder
     {
-        public SessionAndConfigurationHolder(EndpointConfiguration configuration) 
+        public SessionAndConfigurationHolder(EndpointConfiguration endpointConfiguration)
         {
-            Configuration = configuration;
+            EndpointConfiguration = endpointConfiguration;
         }
 
-        // Implement meaningful exception in getter
-        public IMessageSession Session { get; set; }
+        public EndpointConfiguration EndpointConfiguration { get; }
 
-        public EndpointConfiguration Configuration { get; }
+        public IMessageSession MessageSession { get; internal set; }
+
+        public ExceptionDispatchInfo StartupException { get; internal set; }
     }
 }

@@ -1,8 +1,8 @@
 ﻿namespace AddNServiceBus
 {
     using System;
+    using System.Threading;
     using Microsoft.Extensions.DependencyInjection;
-    using Microsoft.Extensions.DependencyInjection.Extensions;
     using NServiceBus;
 
     public static class AddNServiceBusServiceCollectionExtensions
@@ -14,14 +14,32 @@
             return services.AddNServiceBus(endpointConfiguration);
         }
 
-        public static IServiceCollection AddNServiceBus(this IServiceCollection services, EndpointConfiguration configuration)
+        static IServiceCollection AddNServiceBus(this IServiceCollection services, EndpointConfiguration configuration)
         {
-            // find out how to deal with shutdown timeout of 5 seconds
-            // Use .UseShutdownTimeout(timespan) to change the default shutdown timeout.
-            var management = new SessionAndConfigurationHolder(configuration);
-            services.AddSingleton<IMessageSession>(provider => management.Session);
-            services.AddSingleton(management);
-            services.AddHostedService<EndpointManagement>();
+            services.AddSingleton(configuration);
+            services.AddSingleton(new SessionAndConfigurationHolder(configuration));
+            services.AddHostedService<NServiceBusService>();
+            services.AddSingleton(provider =>
+            {
+                var management = provider.GetService<SessionAndConfigurationHolder>();
+                if (management.MessageSession != null)
+                {
+                    return management.MessageSession;
+                }
+
+                var timeout = TimeSpan.FromSeconds(30);
+                // SpinWait is here to accomodate for WebHost vs GenericHost difference
+                // Closure here should be fine under the assumption we always fast track above once initialized
+                if (!SpinWait.SpinUntil(() => management.MessageSession != null || management.StartupException != null,
+                    timeout))
+                {
+                    throw new TimeoutException($"Unable to resolve the message session within '{timeout.ToString()}'.");
+                }
+
+                management.StartupException?.Throw();
+
+                return management.MessageSession;
+            });
             return services;
         }
     }
